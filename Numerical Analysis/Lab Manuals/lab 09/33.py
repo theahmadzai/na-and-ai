@@ -1,28 +1,27 @@
+# Question 33: Write python code for Newton Method code for equation (e**(2*x))-6
+
 from math import e
 import tabulate as tb
 import numpy as np
 import matplotlib.pyplot as plt
 
-# fx = lambda x: (x ** 3) - (3 * x) - 5
-# fdx = lambda x: ((x ** 3) - (3 * x) - 5) / (3 * (x ** 2) - 3)
-# fix = lambda x: (x * ((x ** 3) - (6*x) - 20)) / 4
+fx = lambda x: e**(2*x) - 6
+fdx = lambda x: fx(x) / (2*e**(2*x))
 
-# fx = lambda x: e**(2*x) - 6
-# fdx = lambda x: (e**(2*x) - 6) / (2*e**(2*x))
-
-fx = lambda x: (-4*(x**2))+(3*x)
-fdx = lambda x: fx(x) / ((-8*x)+3)
-
+# plot function
 X = np.linspace(-10,10,1000)
 Y = fx(X)
-
 plt.plot(X,Y,color='orange')
 
-x = (0.6+0.95)/2
+x = 9.6
+
 ans = []
 
 while round(fx(x), 8) != 0:
+    # append result row
     ans.append([x, fx(x)])
+
+    # plot tangent lines
     plt.plot([x,x],[0,fx(x)], marker='o', markersize=2, color="red")
     dx = x - fdx(x)
     plt.plot([x,dx], [fx(x), 0], marker='o', markersize=2, color="green")

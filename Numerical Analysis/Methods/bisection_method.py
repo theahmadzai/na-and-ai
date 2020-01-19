@@ -1,10 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-from tabulate import *
-import time
-import pandas
-from bokeh import plotting, io
+from math import e
+import tabulate as tb
 import numpy as np
+import matplotlib.pyplot as plt
 
 win = tk.Tk()
 win.title('Bisection Method')
@@ -35,29 +34,20 @@ def calculateBisection():
     a = float(lower_limit.get())
     b = float(upper_limit.get())
 
-    f = plotting.figure()
-    x = []
-    y = []
+    X = np.linspace(-5, 5, 1000)
+    Y = fx(X)
 
-    for i in np.arange(-5,5,0.01):
-        x.append(i)
-        y.append(fx(i))
-
-    x1 = []
-    y1 = []
-
-    f.line(x, y, line_width=1)
-    f.circle(x, y, fill_color="white", size=3)
+    plt.plot(X, Y, color='orange')
 
     ans = []
 
-    for i in range(16):
-        x = (a + b) / 2
-        x1.append(x)
-        y1.append(fx(x))
+    x = (a + b) / 2
 
-        ans.append([i, round(a, 4), round(b, 4), round(x, 4), round(fx(x), 4)])
-        answerBox.insert("", "end", values=(i, round(a, 4), round(b, 4), round(x, 4), round(fx(x), 4)))
+    while round(fx(x), 4) != 0:
+        x = (a + b) / 2
+        plt.plot(x, fx(x), marker='o', markersize=3, color='red')
+        ans.append([round(a, 4), round(b, 4), round(x, 4), round(fx(x), 4)])
+        answerBox.insert("", "end", values=(round(a, 4), round(b, 4), round(x, 4), round(fx(x), 4)))
 
         if fx(a) * fx(b) > 0:
             print('No solution exist.')
@@ -68,10 +58,9 @@ def calculateBisection():
         else:
             a = x
 
-    print(tabulate(ans, headers=['n', 'a(-)', 'b(+)', 'mean', 'f(mean)'], tablefmt='orgtbl'))
-    f.circle(x1, y1, fill_color="green", size=5)
-    io.output_file("bokeh_plot.html")
-    io.show(f)
+    print(tb.tabulate(ans, headers=['a(-)', 'b(+)', 'mean', 'f(mean)'], tablefmt='orgtbl', showindex='always'))
+    plt.show()
+
 
 calculateButton = ttk.Button(inputsFrame, text='Calculate', command=calculateBisection)
 calculateButton.grid(row=0, column=3)
