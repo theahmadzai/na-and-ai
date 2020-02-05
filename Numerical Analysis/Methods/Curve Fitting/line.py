@@ -1,54 +1,44 @@
-from math import e
+import tabulate as tb
 import numpy as np
 import matplotlib.pyplot as plt
 
-# f = lambda x: e**x - 6
-# f = lambda x: x**2 + x**3 + x**4 - 6
+xPoints = [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]  # np.linspace(0, 14, 15)
+yPoints = [2, 6, 7, 8, 10, 11, 11, 10, 9]  # np.random.randint(0, 100, 15)
+plt.scatter(xPoints, yPoints, color='orange')
 
-X = np.linspace(0, 14, 15)
-Y = np.random.randint(0, 100, 15)
-plt.scatter(X,Y, color='orange')
-
+_n = len(xPoints)
 _x = 0
 _y = 0
-_x_y = 0
+_xy = 0
 _x2 = 0
-_x3 = 0
-_x4 = 0
-_x2_y = 0
 
-for x,y in zip(X,Y):
+ans = []
+
+for x, y in zip(xPoints, yPoints):
     _x += x
     _y += y
-    _x_y += x*y
-    _x2 += x**2
-    _x3 += x**3
-    _x4 += x**4
-    _x2_y += (x**2)*y
+    _xy += x * y
+    _x2 += x ** 2
 
-#y = ax + bn
-#xy = axx + bx
-#45 = 55b + 10a
-#274 = 385a + 55b
+    # append to ans array
+    ans.append([x, y, x * y, x ** 2])
+
+# append summations
+ans.append(['---', '---', '---', '---', '---', '---', '---'])
+ans.append([_x, _y, _xy, _x2])
+print(tb.tabulate(ans, headers=['_x', '_y', '_xy', '_x2'], tablefmt='orgtbl', showindex='always'))
+
+# _y = a*_x + b*n
+# _xy = a*_x2 + b*_x
 A = np.array([
-    [_x,    len(X)],
-    [_x2,   _x]
+    [_x, _n],
+    [_x2, _x]
 ])
-B = np.array([_y, _x_y])
-L = np.linalg.solve(A,B)
+B = np.array([_y, _xy])
+L = np.linalg.solve(A, B)
 
-linear = lambda x: L[0]*x + L[-1]
-plt.plot(X, [linear(n) for n in X], color='green')
+line = lambda x: L[0] * x + L[1]
 
-A = np.array([
-    [_x4,   _x3,    _x2],
-    [_x3,   _x2,    _x],
-    [_x2,   _x,     _x]
-])
-B = np.array([_x2, _x_y, _y])
-P = np.linalg.solve(A,B)
-
-parabola = lambda x: P[0]*(x**2) + P[1]*x + P[2]
-plt.plot(X,[parabola(n) for n in X], color='blue')
-
+plt.plot(xPoints, [line(n) for n in xPoints], color='green')
+plt.title('Line fitting')
 plt.show()
