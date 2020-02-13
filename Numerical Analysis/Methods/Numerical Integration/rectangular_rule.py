@@ -24,7 +24,6 @@ area = 0
 
 for i in range(n):
     # plot rectangular
-    print(XS[i], XS[i + 1])
     plt.fill([XS[i], XS[i], XS[i + 1], XS[i + 1]], [0, fx(XS[i]), fx(XS[i]), 0], color='blue', edgecolor='black',
              alpha=0.5)
     plt.pause(0.002)
