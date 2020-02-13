@@ -30,7 +30,7 @@ for i in range(n):
     plt.pause(0.002)
 
     # append to ans array
-    ans.append([XS[i], 2 * fx(XS[i])])
+    ans.append([XS[i], fx(XS[i])])
 
     # sum integrated area
     area += fx(XS[i])
